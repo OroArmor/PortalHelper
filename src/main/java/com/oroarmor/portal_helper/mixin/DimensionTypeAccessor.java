@@ -7,13 +7,13 @@ import net.minecraft.world.dimension.DimensionType;
 
 @Mixin(DimensionType.class)
 public interface DimensionTypeAccessor {
-    @Accessor
-    static DimensionType getOVERWORLD() {
+    @Accessor("OVERWORLD")
+    static DimensionType getOverworld() {
         throw new AssertionError();
     }
 
-    @Accessor
-    static DimensionType getTHE_NETHER() {
+    @Accessor("THE_NETHER")
+    static DimensionType getTheNether() {
         throw new AssertionError();
     }
 }

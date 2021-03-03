@@ -3,8 +3,8 @@
   "id": "portal-helper",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Portal Helper",
+  "description": "Helps you visualize where your portals need to go. Create a new portal with the \"n\" key",
   "authors": [
     "OroArmor"
   ],
@@ -17,7 +17,7 @@
   "license": "CC0-1.0",
   "icon": "assets/portal-helper/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "com.oroarmor.portal_helper.PortalHelper"
@@ -28,8 +28,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": ">=1.16.0"
   }
 }

@@ -6,7 +6,10 @@
   "mixins": [
   ],
   "client": [
-    "DimensionTypeAccessor"
+    "DimensionTypeAccessor",
+    "DynamicRegistryManagerAccessor",
+    "OverlayTextureAccessor",
+    "OverlayTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,22 +1,17 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.6-SNAPSHOT'
 	id 'maven-publish'
+	id "signing"
+	id "maven"
 }
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+archivesBaseName = project.ext.archives_base_name
+version = project.ext.mod_version
+group = project.ext.maven_group
 
-repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-}
+
 
 dependencies {
 	// To change the versions see the gradle.properties file
@@ -26,9 +21,6 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
 }
 
 processResources {
@@ -68,25 +60,65 @@ jar {
 	}
 }
 
-// configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			// add all the jars that should be included when publishing to maven
-			artifact(remapJar) {
-				builtBy remapJar
+artifacts {
+	archives jar, sourcesJar
+}
+
+signing {
+	useGpgCmd()
+	sign configurations.archives
+}
+
+group = project.maven_group
+archivesBaseName = project.archives_base_name
+version = project.version
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			def ossrhUsername = "OroArmor"
+			def ossrhPassword = project.hasProperty("ossrhPassword") ? project.property("ossrhPassword") : System.getenv("OSSRH_PASSWORD")
+
+			beforeDeployment {
+				MavenDeployment deployment -> signing.signPom(deployment)
 			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
+
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+			pom.project {
+				name 'Portal Helper'
+				packaging 'jar'
+				// optionally artifactId can be defined here
+				description 'A Minecraft mod that helps to create portals'
+				url 'http://github.com/OroArmor/PortalHelper'
+
+				scm {
+					connection 'scm:git:git://github.com/OroArmor/PortalHelper.git'
+					developerConnection 'scm:git:ssh://github.com:OroArmor/PortalHelper.git'
+					url 'http://github.com/OroArmor/PortalHelper'
+				}
+
+				licenses {
+					license {
+						name 'CC0 1.0'
+						url 'https://creativecommons.org/publicdomain/zero/1.0/legalcode'
+					}
+				}
+
+				developers {
+					developer {
+						id 'OroArmor'
+						name 'Eli Orona'
+						email 'eliorona@live.com'
+						url "oroarmor.com"
+					}
+				}
 			}
 		}
 	}
-    
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
 }
