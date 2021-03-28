@@ -11,10 +11,10 @@
   "contact": {
     "homepage": "https://oroarmor.com/",
     "sources": "https://github.com/OroArmor/PortalHelper",
-    "issues": "https://github.com/OroArmor/PortalHelper"
+    "issues": "https://github.com/OroArmor/PortalHelper/issues"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/portal-helper/icon.png",
 
   "environment": "client",
@@ -28,7 +28,7 @@
   ],
 
   "depends": {
-    "fabric": "*",
+    "fabric": ">=0.30.0",
     "minecraft": ">=1.16.0"
   }
 }
